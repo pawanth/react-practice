@@ -13,7 +13,6 @@ const Nav = () => (
                 </span>
                 <div className="navbar-nav">
                     <NavLink className="navbar-brand" to="/">Posts</NavLink>
-                    <NavLink className="navbar-brand" to="/1">Detail</NavLink>
                     <NavLink className="navbar-brand" to="/create">Create</NavLink>
                     <a className="nav-item nav-link" href="/logout">Logout</a>
                     <a className="nav-item nav-link" href="/login">Login</a>

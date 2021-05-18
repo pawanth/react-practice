@@ -1,9 +1,22 @@
-import { useRef, useState } from "react";
-import {useHistory } from "react-router";
+import { useRef, useState, useEffect } from "react";
+import {useHistory, matchPath } from "react-router";
 
-function Create(props){
+function Update(props){
+    const [post, setPost] = useState({title:'', content:''})
     const form = useRef(this)
+    const match = matchPath(props.history.location.pathname, {
+            path: '/update/:id',
+            exact: true,
+            strict: false
+        })
+    const request = 'http://127.0.0.1:8000/posts/'+ match.params.id
     let history = useHistory();
+    useEffect(()=> {
+        document.title = "Blog|Update"
+        fetch(request)
+            .then((response => response.json()))
+            .then((data) => setPost(data))
+    }, []);
 
     function handleFileUpload(e){
         const picturePreview = URL.createObjectURL(e.target.files[0])
@@ -51,12 +64,12 @@ function Create(props){
         <form ref={form} onSubmit={submit} encType="mutlipart/form-data">
             <p>
                 <label htmlFor="id_title">Title:</label> 
-                <input type="text" name="title" maxLength="120" required id="id_title" defaultValue={''} />
+                <input type="text" name="title" maxLength="120" required id="id_title" defaultValue={post.title} />
             </p>
             {/* {post.error.name && <p>{post.error.name}</p>} */}
             <p>
                 <label htmlFor="id_content">Content:</label> 
-                <textarea name="content" cols="40" rows="10" required id="id_content" defaultValue={''}></textarea>
+                <textarea name="content" cols="40" rows="10" required id="id_content" defaultValue={post.content}></textarea>
             </p>
             {/* {post.error.content && <p>{post.error.content}</p>} */}
             <p>
@@ -69,4 +82,4 @@ function Create(props){
     </>);
 }
 
-export default Create
+export default Update
