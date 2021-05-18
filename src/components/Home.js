@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import {Link} from 'react-router-dom'
 import {useGraphPosts, usePosts} from './helper'
 
-function Home(props){
-    const posts = usePosts()
-    const data = useGraphPosts()
+export default function Home(props){
+    // const posts = usePosts()
+    const posts = useGraphPosts()
     
     let listItems = posts.map((post, index) => 
         <li key={index}><Link to={'/detail/' + post.id}>{post.title}</Link></li>
@@ -17,8 +17,3 @@ function Home(props){
         </>
     );
 }
-const posts = [
-    {id: 1, title: 'Hello World', content: 'Welcome to learning React!'},
-    {id: 2, title: 'Installation', content: 'You can install React from npm.'}
-];
-export default Home;
