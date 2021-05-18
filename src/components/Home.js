@@ -1,26 +1,11 @@
 import { useEffect, useState } from 'react';
 import {Link} from 'react-router-dom'
+import {useGraphPosts, usePosts} from './helper'
 
 function Home(props){
-    const [posts, setposts] = useState([])
-    useEffect(()=> {
-        document.title = "Blog|Home"
-        const requestOptions = {
-            method: 'GET',
-            headers: { 
-                'Content-Type': 'application/json',
-                // 'Authorization': 'Bearer my-token',
-                // 'My-Custom-Header': 'foobar'
-            },
-        };
-        fetch('http://127.0.0.1:8000/posts/', requestOptions)
-            .then((response => response.json()))
-            .then((data) => {
-                    setposts(data.results)
-                    // console.log(data.results)
-                }
-            )
-    }, []);
+    const posts = usePosts()
+    const data = useGraphPosts()
+    
     let listItems = posts.map((post, index) => 
         <li key={index}><Link to={'/detail/' + post.id}>{post.title}</Link></li>
     );
