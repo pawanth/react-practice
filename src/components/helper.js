@@ -35,13 +35,14 @@ export const usePosts = () => {
     return posts
 }
 
-export const useGraphPosts = () => {
-    const [posts, setPosts] = useState([])
+export const useGraphPost = (postId) => {
+    const [post, setPost] = useState({'title':'', 'content':''})
     const query = `
         query {
-            allPosts {
-                id
+            post(id: "${postId}"){
                 title
+                content
+                image
             }
         }
     `;
@@ -53,10 +54,38 @@ export const useGraphPosts = () => {
             body: JSON.stringify({query})
         };
         fetch('http://127.0.0.1:8000/graphql/', requestOptions)
-            .then((response => response.json()))
-            .then((data) => setPosts(data.data.allPosts))
+            .then(response => response.json())
+            .then((data) => setPost(data.data.post))
     }, []);
-    return posts
+    return post
+}
+
+export const useGraphPosts = () => {
+    const [posts, setPosts] = useState([])
+    const query = `
+        query {
+            allPosts {
+                edges {
+                    node {
+                        id
+                        title
+                    }
+                }
+            }
+        }
+    `;
+    useEffect(()=> {
+        document.title = "Blog|Home"
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({query})
+        };
+        fetch('http://127.0.0.1:8000/graphql/', requestOptions)
+            .then(response => response.json())
+            .then((data) => setPosts(data.data.allPosts.edges))
+    }, []);
+    return posts.map(post => post.node)
 }
 
 export const useDelPost = (postId) => {
