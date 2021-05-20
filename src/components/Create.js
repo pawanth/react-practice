@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import {useHistory } from "react-router";
+import {graphql_url} from './helper'
 
 function Create(props){
     const form = useRef(this)
@@ -12,24 +13,33 @@ function Create(props){
 
     const submit = (e) => {
         e.preventDefault()
-        // const formData = new FormData()
-        // formData.append("title", title);
         const formData = new FormData(form.current);
-        // for (var key of formData.entries()){
-        //     console.log(key[0] + ': ' + key[1])
-        // }
+        let myData = {}
+        for (var key of formData.entries()){
+            console.log(key[0] + ': ' + key[1])
+            myData[key[0]] = key[1]
+        }
+        console.log("title: " + myData.title)
+        let query = `
+            mutation {
+                mutatePost(input:{
+                title:"${myData.title}",
+                content:"${myData.content}",
+                }) {
+                    post {
+                        title
+                        id
+                        content
+                    }
+                }
+            }
+        `;
         const requestOptions = {
             method: 'POST',
-            // NOTE: Remove headers to avoid BadRequeest error from DRF
-            // headers: { 
-            //     // 'Content-Type': 'application/json',
-            //     'Accept': 'application/json',
-            //     'Content-Type': 'multipart/form-data',
-            // },
-            body: formData
-            // body: JSON.stringify({ 'title': title, 'content': content })
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({query})
         };
-        fetch('http://localhost:8000/posts/', requestOptions)
+        fetch(graphql_url, requestOptions)
         .then(async response => {
             const isJson = response.headers.get('content-type')?.includes('application/json');
             const data = isJson && await response.json();
@@ -39,11 +49,31 @@ function Create(props){
                 const error = (data && data.message) || response.status;
                 return Promise.reject(error);
             }
-            history.push('/detail/' + data.id)
+            history.push('/detail/' + data.data.mutatePost.post.id)
         })
         .catch(error => {
             console.error('There was an error!', error);
         });
+
+        // const requestOptions = {
+        //     method: 'POST',
+        //     body: formData
+        // };
+        // fetch('http://localhost:8000/posts/', requestOptions)
+        // .then(async response => {
+        //     const isJson = response.headers.get('content-type')?.includes('application/json');
+        //     const data = isJson && await response.json();
+        //     // check for error response
+        //     if (!response.ok) {
+        //         // get error message from body or default to response status
+        //         const error = (data && data.message) || response.status;
+        //         return Promise.reject(error);
+        //     }
+        //     history.push('/detail/' + data.id)
+        // })
+        // .catch(error => {
+        //     console.error('There was an error!', error);
+        // });
     };
     return (
     <>
