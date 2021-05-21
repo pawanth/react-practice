@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import React from 'react';
 import {Link} from 'react-router-dom'
-import {useGraphPosts, usePosts} from './helper'
+import {useGraphPosts } from '../helper/helper'
 
 export default function Home(props){
     // const posts = usePosts()

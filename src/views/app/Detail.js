@@ -1,7 +1,6 @@
-import {useEffect, Fragment} from 'react'
+import React, {useEffect, Fragment} from 'react'
 import { Link } from 'react-router-dom'
-import {matchPath } from "react-router";
-import {useGraphPost, usePost} from './helper'
+import {useGraphPost} from '../helper/helper'
 
 const Detail = (props) => {
     const post = useGraphPost(props.match.params.id)

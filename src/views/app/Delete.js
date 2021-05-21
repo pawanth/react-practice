@@ -1,4 +1,5 @@
-import { useDelPost, useGraphDelPost } from "./helper";
+import {useGraphDelPost } from "../helper/helper";
+import React from 'react'
 
 export default function Delete(props){
     useGraphDelPost(props.match.params.id)

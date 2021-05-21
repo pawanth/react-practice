@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { useHistory, matchPath } from "react-router";
+import { useEffect, useState } from "react";
+import { useHistory } from "react-router";
 
 // helper for REST based api fetching
 export function usePost(postId){
